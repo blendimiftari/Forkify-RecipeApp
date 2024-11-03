@@ -124,14 +124,23 @@ class RecipeView extends View {
   }
 
   _generateMarkupIngredient(ing) {
+    const formatQuantity = quantity => {
+      if (!quantity) return ''; // return empty if no quantity
+      try {
+        return new Fraction(quantity).toFraction(true);
+      } catch {
+        return quantity.toFixed(2);
+      }
+    };
+
     return `
              <li class="recipe__ingredient">
               <svg class="recipe__icon">
                 <use href="${icons}#icon-check"></use>
               </svg>
-              <div class="recipe__quantity">${
-                ing.quantity ? new Fraction(ing.quantity).toString() : ' '
-              }</div>
+              <div class="recipe__quantity">${formatQuantity(
+                ing.quantity
+              )}</div>
               <div class="recipe__description">
                 <span class="recipe__unit">${ing.unit}</span>
                 ${ing.description}
